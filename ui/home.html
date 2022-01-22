@@ -1,0 +1,120 @@
+<!-- templates/success.html -->
+<!doctype html>
+<html>
+
+<head>
+  <title>Go Sample App</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <!-- load bulma css -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <!-- load fontawesome -->
+  <style type="text/css">
+    .json-formatter-row .json-formatter-string,
+    .json-formatter-row .json-formatter-stringifiable {
+      white-space: unset !important;
+    }
+
+    .json-formatter-dark.json-formatter-row .json-formatter-row {
+      line-height: 1.5;
+    }
+
+    .json-container {
+      background: #272822;
+      padding: 20px;
+    }
+
+    .json {
+      text-align: left;
+      display: block;
+      overflow: auto;
+      word-break: break-all;
+    }
+
+    .json .pretty-json-container.object-container {
+      padding: 20px;
+    }
+
+    .json-formatter-string {
+      color: #fd971f !important;
+    }
+
+    .json-formatter-key,
+    .json-formatter-bracket {
+      color: #f9f8f5 !important;
+      letter-spacing: 0.5px;
+    }
+
+    .json-formatter-number {
+      color: #cc6633 !important;
+    }
+
+    .code {
+      line-height: 1.5;
+    }
+
+    body {
+      padding-top: 70px;
+    }
+
+    .btn-primary {
+      background-color: #282c34;
+      color: #ffffff;
+      display: inline-block;
+      font-size: 1.14285714rem;
+      text-align: center;
+      text-decoration: none;
+      width: 150px;
+
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1 class="text-center"><span class="fa fa-user"></span> Information</h1>
+    <div class="row">
+      <div class="col">
+        <div class="json">
+          <h5><b>Encoded - IDtoken</h5>
+          <div id="token" class="json-container">
+            <span id="token1" style="color: #cc6633;"></span>
+            <span id="token2" style="color: #f9f8f5;"></span>
+            <span id="token3" style="color: #fd971f;"></span>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <div class="col">
+        <div class="col">
+          <div class="json">
+            <h5><b>Decoded - Header</h5>
+            <div id="header" class="json-container"></div>
+          </div>
+        </div>
+        <hr>
+        <div class="col">
+          <div class="json">
+            <h5><b>Decoded - payload</h5>
+            <div id="payload" class="json-container"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="text-align: center; margin: 25px;">
+      <a href="https://api.asgardeo.io/t/{{.Org}}/oidc/logout?id_token_hint={{.IDToken}}&post_logout_redirect_uri=http://localhost:8000/logout/openid-connect&state=state_logout" class="btn btn-primary"></span> Logout</a>
+    </div>
+  </div>
+  <script src="https://unpkg.com/json-formatter-js@latest/dist/json-formatter.umd.js"></script>
+  <script>
+    const idTokenArray = "{{.IDToken}}".split(".");
+    const payload = new JSONFormatter(JSON.parse(atob(idTokenArray[1])), 2, { theme: "dark" });
+    const header = new JSONFormatter(JSON.parse(atob(idTokenArray[0])), 2, { theme: "dark" });
+
+    document.getElementById("payload").appendChild(payload.render())
+    document.getElementById("header").appendChild(header.render())
+    document.getElementById("token1").innerHTML = (idTokenArray[0] + ".")
+    document.getElementById("token2").innerHTML = (idTokenArray[1] + ".")
+    document.getElementById("token3").innerHTML = (idTokenArray[2])
+
+  </script>
+</body>
